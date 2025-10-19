@@ -1,0 +1,68 @@
+# ==========================================
+# .NET 8 Web API - Ignorar archivos de compilación
+# ==========================================
+
+# Carpetas de compilación y publicación
+bin/
+obj/
+out/
+publish/
+artifacts/
+Debug/
+Release/
+
+# Resultados de pruebas
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+
+# Paquetes NuGet generados o descargados
+*.nupkg
+*.snupkg
+packages/
+# (excepto los archivos necesarios de build targets)
+!**/packages/build/
+
+# Archivos temporales o intermedios
+*.tmp
+*.temp
+*.cache
+*.log
+*.tlog
+*.pid
+
+# Archivos generados por herramientas
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Archivos de configuración de IDE
+.vs/
+.vscode/
+.idea/
+*.sln.iml
+
+# Archivos de Docker locales y variables de entorno
+docker-compose.override.yml
+docker-compose.local.yml
+.env
+*.env.*
+
+# Archivos de sistema (macOS / Windows)
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
+
+# Archivos comprimidos o exportados
+*.zip
+*.tar
+*.gz
+*.tgz
