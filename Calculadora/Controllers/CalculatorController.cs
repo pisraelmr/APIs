@@ -3,7 +3,7 @@ using Calculadora.Models;
 
 namespace Calculadora.Controllers;
 
-[ApiController]
+[ApiController] // Test
 [Route("api/[controller]")]
 public class CalculatorController : ControllerBase
 {
