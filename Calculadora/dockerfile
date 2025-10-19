@@ -1,0 +1,39 @@
+# ===== Stage 1: build & publish =====
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+
+# 1) Copiamos solo el csproj para aprovechar caché de restore
+COPY ./Calculadora/*.csproj ./Calculadora/
+RUN dotnet restore ./Calculadora/Calculadora.csproj
+
+# 2) Copiamos el resto del código y publicamos
+COPY ./Calculadora/. ./Calculadora/
+WORKDIR /src/Calculadora
+
+# Publica self-contained? -> normalmente no; usamos framework-dependent
+RUN dotnet publish -c Release -o /app/publish --no-restore
+
+# ===== Stage 2: runtime (slim) =====
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
+WORKDIR /app
+
+# (Opcional) Crea un usuario no-root por seguridad
+# RUN useradd -m appuser
+# USER appuser
+
+# Copia build publicado
+COPY --from=build /app/publish ./
+
+# Puerto por defecto (HTTP). Puedes cambiarlo a 8080/80/5000, etc.
+EXPOSE 8080
+
+# Forzamos la URL de escucha (HTTP); HTTPS dentro de contenedor es opcional
+ENV ASPNETCORE_URLS=http://+:8080 \
+    ASPNETCORE_ENVIRONMENT=Production
+
+# (Opcional) Healthcheck simple con curl o wget (comenta si no lo necesitas)
+# HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
+#   CMD wget -qO- http://localhost:8080/health || exit 1
+
+# Entrypoint
+ENTRYPOINT ["dotnet", "Calculadora.dll"]
